@@ -1,0 +1,35 @@
+[
+	{
+		"nombreArchivo": "James, E.L. - Cincuenta Sombras de Grey.pdf",
+		"titulo": "Cincuenta Sombras de Grey",
+		"autor": "E.L. James",
+		"formato": "eBook",
+		"editorial": "Grijalbo",
+		"ano_publicacion": 2011,
+		"materia_termino_geografico": "Estados Unidos",
+		"idioma": "Español",
+		"genero": "Romance"
+	},
+	{
+		"nombreArchivo": "Sábato, Ernesto - El Túnel.pdf",
+		"titulo": "El Túnel",
+		"autor": "Ernesto Sábato",
+		"formato": "eBook",
+		"editorial": "Desconocida",
+		"ano_publicacion": 1948,
+		"materia_termino_geografico": "Argentina",
+		"idioma": "Español",
+		"genero": "Existencialismo"
+	},
+	{
+		"nombreArchivo": "Verne, Julio - De la Tierra a la Luna.pdf",
+		"titulo": "De la Tierra a la Luna",
+		"autor": "Julio Verne",
+		"formato": "eBook",
+		"editorial": "Desconocida",
+		"ano_publicacion": 1865,
+		"materia_termino_geografico": "Estados Unidos",
+		"idioma": "Español",
+		"genero": "Ciencia ficción"
+	}
+]
