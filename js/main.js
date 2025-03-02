@@ -1,44 +1,74 @@
 /* PÁGINA DE INICIO */
-const navMenuBotonSesion = document.getElementById("header_nav_menu_item_linksesion");
 
-/* REGISTRO */
-// Variables
+// ------------------------------------------------
+/* REGISTRO E INICIO DE SESIÓN */
+// Global
 const patronRut = /^\d{7,8}-[0-9kK]$/;
-const rut = document.getElementById('main_formularioregistro_rut');
-const contrasena1 = document.getElementById('main_formularioregistro_contrasena1');
-const contrasena2 = document.getElementById('main_formularioregistro_contrasena2');
-const botonRegistro = document.getElementById('main_formularioregistro_botonregistro');
+let sesionIniciada = JSON.parse(localStorage.getItem('sesionIniciada'));
+const navMenuBotonSesion = document.getElementById("header_nav_menu_item_linksesion");
+navMenuBotonSesion.innerText = sesionIniciada ? 'Cerrar sesión' : 'Iniciar sesión';
 
-// "Event listeners"
-rut?.addEventListener('focusout', () => {
-	if (!patronRut.test(rut.value)) {
-		rut.style.borderColor = 'red';
+navMenuBotonSesion.addEventListener('click', () => {
+	if (sesionIniciada) {
+		localStorage.setItem('sesionIniciada', !sesionIniciada);
+		alert('¡Sesión cerrada!');
+		window.location.href = '../index.html';
 	} else {
-		rut.style.borderColor = 'inherit';
-	};
-});
-botonRegistro?.addEventListener('click', registrarse);
-
-// Funciones
-function registrarse() {
-	if (rut.value === '' || contrasena1.value === '' || contrasena2.value === '') {
-		alert('Por favor, complete todos los campos.');
-	} else if (!patronRut.test(rut.value)) {
-		alert('RUT inválido.');
-	} else if (contrasena1.value !== contrasena2.value) {
-		alert('Las contraseñas no coinciden.');
-	} else {
-		const usuario = new Usuario(rut.value, contrasena1.value);
-		localStorage.setItem('usuario', JSON.stringify(usuario));
-		alert('¡Registro exitoso!');
-		setTimeout(() => window.location.href = '../index.html', 3000);
+		window.location.href = '../pages/inicio_de_sesion.html';
 	}
+});
+
+function validar(rut, contrasena1, contrasena2) {
+	// Validaciones
+	const algunCampoVacio = rut.value === '' || contrasena1.value === '' || (contrasena2 && contrasena2.value === '');
+	const rutInvalido = !patronRut.test(rut.value);
+	const contrasenasNoCoinciden = contrasena2 && contrasena1.value !== contrasena2.value;
+	// ------------------------------------------------
+	// Mensajes de error
+	if (algunCampoVacio) {
+		alert('Por favor, complete todos los campos.');
+	} else if (rutInvalido) {
+		alert('RUT inválido.');
+	} else if (contrasenasNoCoinciden) {
+		alert('Las contraseñas no coinciden.');
+	} else return true;
 }
 
-/* INICIO DE SESIÓN */
-// Variables
+// Registro
+const m_fr_rut = document.getElementById('main_formularioregistro_rut');
+const m_fr_contrasena1 = document.getElementById('main_formularioregistro_contrasena1');
+const m_fr_contrasena2 = document.getElementById('main_formularioregistro_contrasena2');
+const m_fr_botonRegistro = document.getElementById('main_formularioregistro_botonregistro');
 
-// Funciones
-function iniciarSesion() {
+m_fr_rut?.addEventListener('focusout', () => m_fr_rut.style.borderColor = patronRut.test(m_fr_rut.value) ? 'inherit' : 'red');
+m_fr_botonRegistro?.addEventListener('click', () => registrarse(m_fr_rut, m_fr_contrasena1, m_fr_contrasena2));
 
+function registrarse(rut, contrasena1, contrasena2) {
+	validar(rut, contrasena1, contrasena2);
+	const usuario = new Usuario(m_fr_rut.value, m_fr_contrasena1.value);
+	localStorage.setItem('usuario', JSON.stringify(usuario));
+	alert('¡Registro exitoso!');
+	window.location.href = '../index.html';
+}
+
+// Inicio de sesión
+const m_fl_rut = document.getElementById('main_formulariologin_rut');
+const m_fl_contrasena = document.getElementById('main_formulariologin_contrasena');
+const m_fl_botonlogin = document.getElementById('main_formulariologin_botonlogin');
+
+m_fl_botonlogin?.addEventListener('click', () => iniciarSesion(m_fl_rut, m_fl_contrasena));
+
+function iniciarSesion(rut, contrasena) {
+	const validado = validar(rut, contrasena);
+	if (validado) {
+		const usuario = JSON.parse(localStorage.getItem('usuario'));
+		if (usuario.rut === rut.value && usuario.contrasena === contrasena.value) {
+			sesionIniciada = true;
+			localStorage.setItem('sesionIniciada', sesionIniciada);
+			alert('¡Inicio de sesión exitoso!');
+			window.location.href = '../index.html';
+		} else {
+			alert('RUT o contraseña incorrectos.');
+		}
+	}
 }
