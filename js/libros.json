@@ -5,7 +5,8 @@
 		"autor": "E.L. James",
 		"editorial": "Grijalbo",
 		"ano_publicacion": 2011,
-		"tematica": "Romance"
+		"tematica": "Romance",
+		"resena": "Cincuenta Sombras de Grey es una novela erótica de la autora británica E. L. James. Narrada en gran medida en Seattle, es la primera entrega de una trilogía que describe la relación entre una recién graduada de la universidad, Anastasia Steele, y un joven magnate de negocios, Christian Grey."
 	},
 	{
 		"nombreArchivo": "Sábato, Ernesto - El Túnel.pdf",
@@ -13,7 +14,8 @@
 		"autor": "Ernesto Sábato",
 		"editorial": "Desconocida",
 		"ano_publicacion": 1948,
-		"tematica": "Existencialismo"
+		"tematica": "Existencialismo",
+		"resena": "El Túnel es una novela escrita por el escritor argentino Ernesto Sábato. Publicada en 1948, es considerada una de las obras fundamentales de la literatura argentina y latinoamericana del siglo XX. La novela es un relato en primera persona de un pintor, Juan Pablo Castel, que narra los hechos que lo llevaron a asesinar a María Iribarne."
 	},
 	{
 		"nombreArchivo": "Verne, Julio - De la Tierra a la Luna.pdf",
@@ -21,6 +23,7 @@
 		"autor": "Julio Verne",
 		"editorial": "Desconocida",
 		"ano_publicacion": 1865,
-		"tematica": "Ciencia ficción"
+		"tematica": "Ciencia ficción",
+		"resena": "De la Tierra a la Luna es una novela de Julio Verne publicada en 1865. Es la primera parte de las aventuras de los viajes extraordinarios de Verne. La novela cuenta la historia de un grupo de miembros del Gun Club de Baltimore que deciden construir un cañón gigante para disparar un proyectil a la Luna."
 	}
 ]
