@@ -33,3 +33,20 @@ a {
 	justify-content: flex-end;
 	list-style: none;
 }
+
+.main_libros {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px
+}
+
+.main_libros_figura {
+	width: 200px;
+}
+.main_libros_figura_portada {
+	width: 100%;
+}
+
+.main_libros_figura_titulo {
+	text-align: center;
+}

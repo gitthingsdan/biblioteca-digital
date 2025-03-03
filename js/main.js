@@ -1,12 +1,80 @@
 /* PÁGINA DE INICIO */
+let mainLibros, libros;
+if (window.location.href.includes('index.html')) {
+	mainLibros = document.getElementById('main_libros');
+	libros = await obtenerLibros();
+	mostrarLibros();	
+}
 
+async function obtenerLibros() {
+	try {
+		const response = await fetch('js/libros.json');
+		let libros = await response.json();
+		libros = libros.map(el => new Libro(el.nombreArchivo, el.titulo, el.autor, el.editorial, el.ano_publicacion, el.tematica, el.resena));
+		return libros;
+	} catch (error) {
+		console.error('Error cargando libros.json:', error);
+	}
+}
+
+function mostrarLibros() {
+	mainLibros.innerHTML = '';
+	libros.forEach(libro => {
+		let figuraLibro = document.createElement('figure');
+		figuraLibro.className = 'main_libros_figura';
+
+		let portadaLibro = document.createElement('img');
+		portadaLibro.className = 'main_libros_figura_portada';
+		portadaLibro.src = `img/portadas/${libro.nombreArchivo.replace('.pdf', '.jpg')}`;
+		portadaLibro.alt = `Cubierta del libro ${libro.titulo}, de ${libro.autor}`;
+		figuraLibro.appendChild(portadaLibro);
+
+		let tituloLibro = document.createElement('figcaption');
+		tituloLibro.className = 'main_libros_figura_titulo';
+		tituloLibro.textContent = `${libro.autor} - ${libro.titulo}`;
+
+		figuraLibro.addEventListener('click', () => {
+			mostrarDatosDeLibro(libro);
+		});
+		figuraLibro.appendChild(tituloLibro);
+
+		mainLibros.appendChild(figuraLibro);
+	});
+}
+
+function mostrarDatosDeLibro(libro) {
+	const anteriorContenedorDatosLibro = document.getElementById('main_libros_datos');
+	anteriorContenedorDatosLibro?.remove();
+	const contenedorDatosLibro = document.createElement('div');
+	contenedorDatosLibro.className = 'main_libros_datos';
+	contenedorDatosLibro.id = 'main_libros_datos';
+	contenedorDatosLibro.innerHTML = `
+		<h2>${libro.titulo}</h2>
+		<img src="img/portadas/${libro.nombreArchivo.replace('.pdf', '.jpg')}" alt="Cubierta del libro ${libro.titulo}, de ${libro.autor}">
+		<p><strong>Autor:</strong> ${libro.autor}</p>
+		<p><strong>Editorial:</strong> ${libro.editorial}</p>
+		<p><strong>Año de publicación:</strong> ${libro.ano_publicacion}</p>
+		<p><strong>Temática:</strong> ${libro.tematica}</p>
+		<p><strong>Reseña:</strong> ${libro.resena}</p>
+		<a id="main_libros_datos_descarga" href="libros/${libro.nombreArchivo}" download="${libro.nombreArchivo}">Descargar</a>
+	`;
+	mainLibros.appendChild(contenedorDatosLibro);
+	const botonDescarga = document.getElementById('main_libros_datos_descarga');
+	botonDescarga.addEventListener('click', (e) => {
+		if (!sesionIniciada) {
+			e.preventDefault();
+			alert('Para descargar el libro, inicie sesión.');
+			window.location.href = 'pages/inicio_de_sesion.html';
+		}
+	});
+}
 // ------------------------------------------------
 /* REGISTRO E INICIO DE SESIÓN */
-// Global
+// Global (Registro e inicio de sesión)
 const patronRut = /^\d{7,8}-[0-9kK]$/;
 let sesionIniciada = JSON.parse(localStorage.getItem('sesionIniciada'));
 const navMenuBotonSesion = document.getElementById("header_nav_menu_item_linksesion");
-navMenuBotonSesion.innerText = sesionIniciada ? 'Cerrar sesión' : 'Iniciar sesión';
+navMenuBotonSesion.innerText = sesionIniciada ? 'Cerrar sesión' : 'Inicio de sesión';
 
 navMenuBotonSesion.addEventListener('click', () => {
 	if (sesionIniciada) {
