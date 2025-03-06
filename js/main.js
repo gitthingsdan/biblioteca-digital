@@ -1,9 +1,10 @@
 /* PÁGINA DE INICIO */
 let mainLibros, libros;
+let datosMostrados = false;
 if (window.location.href.includes('index.html')) {
 	mainLibros = document.getElementById('main_libros');
 	libros = await obtenerLibros();
-	mostrarLibros();	
+	mostrarLibros(libros);	
 }
 
 async function obtenerLibros() {
@@ -17,9 +18,9 @@ async function obtenerLibros() {
 	}
 }
 
-function mostrarLibros() {
+function mostrarLibros(arrayLibros) {
 	mainLibros.innerHTML = '';
-	libros.forEach(libro => {
+	arrayLibros.forEach(libro => {
 		let figuraLibro = document.createElement('figure');
 		figuraLibro.className = 'main_libros_figura';
 
@@ -48,25 +49,49 @@ function mostrarDatosDeLibro(libro) {
 	const contenedorDatosLibro = document.createElement('div');
 	contenedorDatosLibro.className = 'main_libros_datos';
 	contenedorDatosLibro.id = 'main_libros_datos';
-	contenedorDatosLibro.innerHTML = `
-		<h2>${libro.titulo}</h2>
-		<img src="img/portadas/${libro.nombreArchivo.replace('.pdf', '.jpg')}" alt="Cubierta del libro ${libro.titulo}, de ${libro.autor}">
-		<p><strong>Autor:</strong> ${libro.autor}</p>
-		<p><strong>Editorial:</strong> ${libro.editorial}</p>
-		<p><strong>Año de publicación:</strong> ${libro.ano_publicacion}</p>
-		<p><strong>Temática:</strong> ${libro.tematica}</p>
-		<p><strong>Reseña:</strong> ${libro.resena}</p>
-		<a id="main_libros_datos_descarga" href="libros/${libro.nombreArchivo}" download="${libro.nombreArchivo}">Descargar</a>
-	`;
+	if (datosMostrados) {
+		contenedorDatosLibro.innerHTML = ""
+		datosMostrados = false;
+	} else {
+		contenedorDatosLibro.innerHTML = `
+			<h2>${libro.titulo}</h2>
+			<img src="img/portadas/${libro.nombreArchivo.replace('.pdf', '.jpg')}" alt="Cubierta del libro ${libro.titulo}, de ${libro.autor}">
+			<p><strong>Autor:</strong> ${libro.autor}</p>
+			<p><strong>Editorial:</strong> ${libro.editorial}</p>
+			<p><strong>Año de publicación:</strong> ${libro.ano_publicacion}</p>
+			<p><strong>Temática:</strong> ${libro.tematica}</p>
+			<p><strong>Reseña:</strong> ${libro.resena}</p>
+			<a id="main_libros_datos_descarga" href="libros/${libro.nombreArchivo}" download="${libro.nombreArchivo}">Descargar</a>
+		`;
+		datosMostrados = true;
+	}
 	mainLibros.appendChild(contenedorDatosLibro);
 	const botonDescarga = document.getElementById('main_libros_datos_descarga');
-	botonDescarga.addEventListener('click', (e) => {
+	botonDescarga?.addEventListener('click', (e) => {
 		if (!sesionIniciada) {
 			e.preventDefault();
 			alert('Para descargar el libro, inicie sesión.');
 			window.location.href = 'pages/inicio_de_sesion.html';
 		}
 	});
+}
+
+let campoBusqueda = document.getElementById('header_nav_menu_item_search');
+campoBusqueda?.addEventListener("keyup", () => filtrarLibros()); /* Me gustaría entender por qué la consulta se captura correctamente con "keyup" y no "keydown" */
+
+function filtrarLibros() {
+	let consulta = campoBusqueda.value;
+
+	// Sugerencia de Copilot:
+	let librosFiltrados = libros.filter(libro => {
+		return Object.values(libro).some(valor => {
+			let valorMinusculas = valor.toString().toLowerCase();
+			let consultaMinusculas = consulta.toLowerCase();
+			return valorMinusculas.includes(consultaMinusculas);
+		});
+	});
+
+	mostrarLibros(librosFiltrados);
 }
 // ------------------------------------------------
 /* REGISTRO E INICIO DE SESIÓN */
