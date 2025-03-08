@@ -1,10 +1,16 @@
 /* PÁGINA DE INICIO */
-let mainLibros, libros;
+let mainLibros, libros, campoBusqueda;
 let datosMostrados = false;
-if (window.location.href.includes('index.html')) {
+if (window.location.href.includes('index.html') || window.location.href === "http://localhost:3000/") {
 	mainLibros = document.getElementById('main_libros');
 	libros = await obtenerLibros();
-	mostrarLibros(libros);	
+	mostrarLibros(libros);
+	
+	campoBusqueda = document.getElementById('header_nav_menu_item_search');
+	campoBusqueda?.addEventListener("keyup", () => filtrarLibros()); /* Me gustaría entender por qué la consulta se captura correctamente con "keyup" y no "keydown" */
+
+	const ordenador = document.getElementById('header_nav_menu_item_sorter');
+	ordenador?.addEventListener('change', () => ordenarLibrosAlfabeticamente(ordenador.value));
 }
 
 async function obtenerLibros() {
@@ -32,7 +38,7 @@ function mostrarLibros(arrayLibros) {
 
 		let tituloLibro = document.createElement('figcaption');
 		tituloLibro.className = 'main_libros_figura_titulo';
-		tituloLibro.textContent = `${libro.autor} - ${libro.titulo}`;
+		tituloLibro.innerHTML = `${libro.autor} - ${libro.titulo}<br>(${libro.tematica})`;
 
 		figuraLibro.addEventListener('click', () => {
 			mostrarDatosDeLibro(libro);
@@ -76,9 +82,6 @@ function mostrarDatosDeLibro(libro) {
 	});
 }
 
-let campoBusqueda = document.getElementById('header_nav_menu_item_search');
-campoBusqueda?.addEventListener("keyup", () => filtrarLibros()); /* Me gustaría entender por qué la consulta se captura correctamente con "keyup" y no "keydown" */
-
 function filtrarLibros() {
 	let consulta = campoBusqueda.value;
 
@@ -93,6 +96,14 @@ function filtrarLibros() {
 
 	mostrarLibros(librosFiltrados);
 }
+
+function ordenarLibrosAlfabeticamente(criterio) {
+	if (criterio !== "default") {
+		let librosOrdenados = libros.sort((a, b) => a[criterio].localeCompare(b[criterio]));
+		mostrarLibros(librosOrdenados);		
+	}
+}
+
 // ------------------------------------------------
 /* REGISTRO E INICIO DE SESIÓN */
 // Global (Registro e inicio de sesión)
